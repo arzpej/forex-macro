@@ -59,13 +59,7 @@ FRED_SERIES = {
     "VIXCLS":    "vix",                  # Market fear index
 }
 
-YAHOO_TICKERS = {
-    "EURUSD=X": "EUR/USD",
-    "DX-Y.NYB": "US Dollar Index (DXY)",
-    "^VIX": "VIX volatility index",
-    "^GSPC": "S&P 500",
-    "GC=F": "Gold futures",
-}
+
 
 START_DATE = "2010-01-01"
 

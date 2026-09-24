@@ -10,12 +10,11 @@ import sys
 
 import pandas as pd
 
-from src.config import FRED_SERIES, START_DATE, YAHOO_TICKERS
+from src.config import FRED_SERIES, START_DATE
 from src.data.base import DataSourceError
 from src.data.forexfactory_source import ForexFactorySource
 from src.data.fred_source import FredSource
 from src.data.oanda_source import OandaSource
-from src.data.yahoo_source import YahooSource
 from src.logger import get_logger
 
 log = get_logger("update_all")
@@ -62,17 +61,9 @@ def run_forexfactory(results: dict) -> None:
         results["Forex Factory"] = f"FAILED: {err}"
 
 
-def run_yahoo(results: dict) -> None:
-    yahoo = YahooSource()
-    for ticker in YAHOO_TICKERS:
-        try:
-            yahoo.save(yahoo.download(ticker, START_DATE), f"yahoo_{ticker}")
-            results[f"Yahoo {ticker}"] = "OK"
-        except DataSourceError as err:
-            results[f"Yahoo {ticker}"] = f"FAILED: {err}"
 
 
-JOBS = {"fred": run_fred, "oanda": run_oanda, "ff": run_forexfactory, "yahoo": run_yahoo}
+JOBS = {"fred": run_fred, "oanda": run_oanda, "ff": run_forexfactory}
 
 
 def main(selected: list[str]) -> int:
