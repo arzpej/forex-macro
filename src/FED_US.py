@@ -1,26 +1,18 @@
 """Project settings. Secrets come from the .env file, never from the code."""
 
-import os
-from pathlib import Path
-
+import requests
+import pandas as pd
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Folders
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-RAW_DIR = PROJECT_ROOT / "data" / "raw"
-LOG_DIR = PROJECT_ROOT / "logs"
 
 # API keys (read from .env)
 FRED_API_KEY = "cfde8ab121aeff8bec8ec4adf4faa0f1"
-FED_url = "https://api.stlouisfed.org/fred/series/observations"
+FRED_URL = "https://api.stlouisfed.org/fred/series/observations"
 
 FOREXFACTORY_URL= "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
 
-OANDA_TOKEN = "b6011d88fcef69b5cababa48d5e8d12d-8ed494a8062925240b9093fbb70549a1"
-OANDA_ACCOUNT_ID="101-011-40520853-001"
-OANDA_URL="https://api-fxpractice.oanda.com"
 
 # What to download
 
@@ -61,5 +53,42 @@ FRED_SERIES = {
 
 
 
-START_DATE = "2010-01-01"
+def get_fred(series, name, start="2010-01-01"):
+    params = {
+        "series_id": series,
+        "api_key": FRED_API_KEY,
+        "file_type": "json",
+        "observation_start": start,
+    }
+    response = requests.get(FRED_URL, params=params)
+    df = pd.DataFrame(response.json()["observations"])[["date", "value"]]
+    df["name"] = name
+    return df
+ 
+ 
+def get_all_fred():
+    tables = []
+    for series, name in FRED_SERIES.items():
+        tables.append(get_fred(series, name))
+        print("downloaded", name)
+    df = pd.concat(tables)
+    df.to_csv("data/raw/fred_raw.csv", index=False)
+    return df
+ 
+ 
+def get_calendar():
+    response = requests.get(FOREXFACTORY_URL)
+    df = pd.DataFrame(response.json())
+    df.to_csv("data/raw/ff_calendar.csv", index=False)
+    return df
 
+def clean_fred():
+    df = pd.read_csv("data/raw/fred_raw.csv")
+    df["date"] = pd.to_datetime(df["date"])
+    df["value"] = pd.to_numeric(df["value"], errors="coerce")   # "." becomes empty
+    df = df.dropna()
+    df = df.pivot_table(index="date", columns="name", values="value")  # one column per indicator
+    df = df.resample("MS").last().ffill()                               # one row per month
+    df.to_csv("data/clean/fred_clean.csv")
+    return df
+ 
