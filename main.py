@@ -1,22 +1,39 @@
-from src.FED_US import get_all_fred, clean_fred
-from src.ECB_EU import get_all_ecb, clean_ecb
-from src.CHINA_CN import get_all_china, clean_china
+import pandas as pd
+from src.FED_US import update_fred
+from src.ECB_EU import update_ecb
+from src.CHINA_CN import update_china
+from src.UK import update_uk
+from src.JAPAN import update_japan
+from src.database import export_clean
+from src.run_log import write_log, last_update, mark_updated, update_needed
+from charts import draw_rate_chart, draw_unemployment_chart
 
-# --- US ---
-get_all_fred()
-us = clean_fred()
-print("US:", us.shape)
-print(us.tail())
+FORCE_UPDATE = False           # True = update now, even if already updated today
 
-# --- Europe ---
-get_all_ecb()
-eu = clean_ecb()
-print("EU:", eu.shape)
-print(eu.tail())
+write_log("STARTED")
 
-# --- China ---
-get_all_china()
-cn = clean_china()
-print("CN:", cn.shape)
-print(cn.tail())
- 
+# 1 + 2. Update database and clean file - only if not updated today
+if FORCE_UPDATE or update_needed():
+    try:
+        update_fred()
+        update_ecb()
+        update_china()
+        update_uk()
+        update_japan()
+        macro = export_clean()
+        mark_updated()                                   # write today's date in data/last_update.txt
+        write_log(f"UPDATED - clean file has {len(macro)} rows")
+    except Exception as error:
+        write_log(f"FAILED - {error}")
+        raise
+else:
+    write_log(f"SKIPPED - already updated on {last_update()}")
+
+# 3. Charts for every country in the file
+df = pd.read_csv("data/macro_clean.csv", parse_dates=["date"])
+
+for country in df["country"].unique():
+    draw_rate_chart(df, country)
+    draw_unemployment_chart(df, country)
+
+write_log("FINISHED")
