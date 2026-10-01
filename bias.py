@@ -10,11 +10,8 @@ from src.run_log import write_log, last_update, mark_updated, update_needed
 from charts import draw_rate_chart, draw_unemployment_chart
 from fx_model import run_model
 from model_charts import draw_model_charts
-from probability import run_probabilities
-from explain import run_explain
 
 FORCE_UPDATE = False           # True = update now, even if already updated today
-EXPLAIN_DATE = None            # None = latest month | "2022-06-01" = see why the model said what it said then
 
 write_log("STARTED")
 
@@ -43,14 +40,8 @@ for country in df["country"].unique():
     draw_rate_chart(df, country)
     draw_unemployment_chart(df, country)
 
-# 4. The model: engines -> policy -> FX pairs (with the WHY)
+# 4. The 3-layer model: economy -> policy -> FX pairs (with the WHY)
 cs, pairs, regime = run_model(df)
 draw_model_charts(cs, pairs, regime)
-
-# 5. The simple dashboard: chance of the next move for every engine, currency and pair
-results = run_probabilities(df, cs, pairs)
-
-# 6. Explain tables: which indicators gave which result (for testing / retesting / retraining)
-run_explain(df, cs, pairs, regime, results, date=EXPLAIN_DATE)
 
 write_log("FINISHED")

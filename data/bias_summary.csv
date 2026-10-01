@@ -1,0 +1,6 @@
+currency,date,Growth,Inflation,Labour,Liquidity,BIAS,cycle,central_bank,bias_label,Expectations
+CNY,2026-10-01,-53.0,25.0,-27.0,40.0,-10.0,Stagflation,Neutral,NEUTRAL,
+EUR,2026-10-01,-20.0,-23.0,-45.0,,-12.0,Slowdown,Neutral,NEUTRAL,24.0
+JPY,2026-10-01,34.0,3.0,73.0,,58.0,Expansion (hot),Hawkish,STRONG BULLISH,100.0
+GBP,2026-10-01,28.0,-52.0,-17.0,,-3.0,Recovery,Dovish,NEUTRAL,19.0
+USD,2026-10-01,-19.0,-38.0,-15.0,36.0,-4.0,Slowdown,Neutral,NEUTRAL,22.0

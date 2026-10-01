@@ -1,3 +1,18 @@
-2026-10-01 22:18:11 | anism | STARTED
-2026-10-01 22:19:32 | anism | UPDATED - clean file has 1754 rows
-2026-10-01 22:19:37 | anism | FINISHED
+2026-10-01 23:15:04 | anism | STARTED
+2026-10-01 23:15:04 | anism | SKIPPED - already updated on 2026-10-01
+2026-10-01 23:15:12 | anism | FINISHED
+2026-10-01 23:17:09 | anism | STARTED
+2026-10-01 23:17:09 | anism | SKIPPED - already updated on 2026-10-01
+2026-10-01 23:17:17 | anism | FINISHED
+2026-10-01 23:17:22 | anism | STARTED
+2026-10-01 23:17:22 | anism | SKIPPED - already updated on 2026-10-01
+2026-10-01 23:17:30 | anism | FINISHED
+2026-10-01 23:39:30 | anism | STARTED
+2026-10-01 23:39:30 | anism | SKIPPED - already updated on 2026-10-01
+2026-10-01 23:39:39 | anism | FINISHED
+2026-10-01 23:43:14 | anism | STARTED
+2026-10-01 23:43:14 | anism | SKIPPED - already updated on 2026-10-01
+2026-10-01 23:43:23 | anism | FINISHED
+2026-10-01 23:49:11 | anism | STARTED
+2026-10-01 23:49:11 | anism | SKIPPED - already updated on 2026-10-01
+2026-10-01 23:49:21 | anism | FINISHED
